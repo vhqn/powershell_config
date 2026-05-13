@@ -24,3 +24,18 @@ function cd {
         Set-Location @args
     }
 }
+
+# 终端选中自动复制（需要在 Trae/VS Code 设置中开启 terminal.integrated.copyOnSelection）
+# Java 工具链默认使用 UTF-8 编码
+$env:JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+
+function realpath($Path) {
+    if (-not $Path) {
+        $Path = "."
+    }
+    if (Test-Path -LiteralPath $Path) {
+        (Get-Item -LiteralPath $Path).FullName
+    } else {
+        Write-Error "realpath: ${Path}: No such file or directory"
+    }
+}
