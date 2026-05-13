@@ -1,4 +1,5 @@
 Set-Alias -Name trae -Value "D:\software\Trae CN\bin\trae-cn.cmd"
+Set-PSReadLineKeyHandler -Key Ctrl+d -Function DeleteCharOrExit
 
 function touch($Path) { New-Item -ItemType File -Path $Path }
 if (Test-Path Alias:rm) { Remove-Item Alias:rm -Force }
