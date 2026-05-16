@@ -1,5 +1,6 @@
 Set-Alias -Name tr -Value "D:\software\Trae CN\bin\trae-cn.cmd"
 Set-PSReadLineKeyHandler -Key Ctrl+d -Function DeleteCharOrExit
+Set-PSReadLineKeyHandler -Key Ctrl+k -ScriptBlock { [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine(); Clear-Host }
 
 function touch($Path) { New-Item -ItemType File -Path $Path }
 if (Test-Path Alias:rm) { Remove-Item Alias:rm -Force }
