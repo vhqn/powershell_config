@@ -1,4 +1,4 @@
-Set-Alias -Name trae -Value "D:\software\Trae CN\bin\trae-cn.cmd"
+Set-Alias -Name tr -Value "D:\software\Trae CN\bin\trae-cn.cmd"
 Set-PSReadLineKeyHandler -Key Ctrl+d -Function DeleteCharOrExit
 
 function touch($Path) { New-Item -ItemType File -Path $Path }
@@ -27,7 +27,7 @@ function cd {
 
 # 终端选中自动复制（需要在 Trae/VS Code 设置中开启 terminal.integrated.copyOnSelection）
 # Java 工具链默认使用 UTF-8 编码
-$env:JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+# $env:JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
 
 function realpath($Path) {
     if (-not $Path) {
@@ -38,4 +38,14 @@ function realpath($Path) {
     } else {
         Write-Error "realpath: ${Path}: No such file or directory"
     }
+}
+
+# Import the Chocolatey Profile that contains the necessary code to enable
+# tab-completions to function for `choco`.
+# Be aware that if you are missing these lines from your profile, tab completion
+# for `choco` will not function.
+# See https://ch0.co/tab-completion for details.
+$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+if (Test-Path($ChocolateyProfile)) {
+  Import-Module "$ChocolateyProfile"
 }
