@@ -4,7 +4,12 @@ Set-PSReadLineKeyHandler -Key Ctrl+k -ScriptBlock { [Microsoft.PowerShell.PSCons
 
 function touch($Path) { New-Item -ItemType File -Path $Path }
 if (Test-Path Alias:rm) { Remove-Item Alias:rm -Force }
-function rm($Path) { Remove-Item -Path $Path -Recurse -Force }
+function rm($Path) {
+    Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction SilentlyContinue
+    if (Test-Path -LiteralPath $Path) {
+        cmd /c rd /s /q "$Path" 2>$null
+    }
+}
 if (Test-Path Alias:ls) { Remove-Item Alias:ls -Force }
 function ls { Get-ChildItem @args | Format-Wide -Property Name -AutoSize }
 function l { Get-ChildItem @args | Sort-Object LastWriteTime }
