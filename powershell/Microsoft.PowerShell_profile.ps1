@@ -5,9 +5,15 @@ Set-PSReadLineKeyHandler -Key Ctrl+k -ScriptBlock { [Microsoft.PowerShell.PSCons
 function touch($Path) { New-Item -ItemType File -Path $Path }
 if (Test-Path Alias:rm) { Remove-Item Alias:rm -Force }
 function rm($Path) {
-    Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction SilentlyContinue
-    if (Test-Path -LiteralPath $Path) {
-        cmd /c rd /s /q "$Path" 2>$null
+    if ($Path -match '[\*\?\[\]]') {
+        # 含通配符，使用 -Path 来展开通配符
+        Remove-Item -Path $Path -Force -ErrorAction SilentlyContinue
+    } else {
+        # 不含通配符，走原来的逻辑（支持 cmd 兜底处理长路径等顽固文件）
+        Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction SilentlyContinue
+        if (Test-Path -LiteralPath $Path) {
+            cmd /c rd /s /q "$Path" 2>$null
+        }
     }
 }
 if (Test-Path Alias:ls) { Remove-Item Alias:ls -Force }
